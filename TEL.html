@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE EXCELLENT LIFE CONFERENCE</title>
+    <meta name="description" content="Join THE EXCELLENT LIFE CONFERENCE 2025 - A transformative event focused on spiritual growth, advancement, and progress. September 5-7, 2025.">
+    <meta name="keywords" content="Christian conference, spiritual growth, faith, excellent life, 2025 conference">
+    <meta name="author" content="Hillcity Christian Center">
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="THE EXCELLENT LIFE CONFERENCE 2025">
+    <meta property="og:description" content="Join us for a transformative event focused on spiritual growth, advancement, and progress. September 5-7, 2025.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80">
+    <meta property="og:url" content="https://example.com">
+    <meta property="og:type" content="website">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
+    
+    <style>
+        /* CSS Variables */
+        :root {
+            --primary-color: #3498db;  /* Blue for buttons, links, and UI elements */
+            --secondary-color: #2980b9;  /* Secondary blue */
+            --dark-color: #121212;
+            --light-color: #f8f9fa;
+            --overlay: rgba(0, 0, 0, 0.7);
+            --success-color: #2ecc71;  /* Green for success messages */
+            --error-color: #e74c3c;    /* Red for error messages */
+            --info-color: #17a2b8;
+            --text-blue: #3498db;      /* Blue for headings */
+        }
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: var(--light-color);  /* White for normal text */
+            overflow-x: hidden;
+            padding-top: 80px;
+            background: linear-gradient(135deg, #18c6e0 0%, #83bfec 50%, #18c6e0 100%); /* Full page gradient */
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Skip to main content link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--primary-color);
+            color: var(--dark-color);
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 0 0 4px 0;
+            z-index: 100;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--dark-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .loader {
+            width: 80px;
+            height: 80px;
+            border: 10px solid rgba(52, 152, 219, 0.2);  /* Changed to blue */
+            border-radius: 50%;
+            border-top-color: var(--primary-color);  /* Changed to blue */
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(18, 18, 18, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 15px 0;
+            transition: all 0.3s ease;
+        }
+        .navbar.scrolled {
+            padding: 10px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .logo img {
+            height: 50px;
+            width: auto;
+            margin-right: 10px;
+        }
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.8rem;
+            color: var(--primary-color);  /* Blue for logo text */
+            letter-spacing: 1px;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        .nav-links li {
+            margin-left: 30px;
+        }
+        .nav-links a {
+            color: var(--light-color);  /* White for nav links */
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        .nav-links a:hover, .nav-links a:focus {
+            color: var(--primary-color);  /* Blue on hover */
+            outline: none;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);  /* Blue */
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover::after, .nav-links a:focus::after {
+            width: 100%;
+        }
+        /* Special styling for Watch Live link */
+        .nav-links .watch-live {
+            background-color: var(--primary-color);  /* Blue */
+            color: var(--dark-color);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);  /* Blue */
+            animation: pulse 2s infinite;
+        }
+        .nav-links .watch-live:hover, .nav-links .watch-live:focus {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.6);  /* Blue */
+            outline: none;
+        }
+        .nav-links .watch-live::after {
+            display: none;
+        }
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.4);  /* Blue */
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(52, 152, 219, 0);  /* Blue */
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(52, 152, 219, 0);  /* Blue */
+            }
+        }
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--light-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), 
+                        url('backround.jpg') center/cover no-repeat;
+            background-blend-mode: overlay;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            position: relative;
+            overflow: hidden;
+            margin-top: -80px;
+            padding-top: 80px;
+            border-radius: 0 0 50% 50% / 20px;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('backround.jpg') center/cover no-repeat;
+            opacity: 0.3;
+            z-index: -1;
+            border-radius: 0 0 50% 50% / 20px;
+        }
+        .warrior-overlay {
+            position: absolute;
+            bottom: -100px;
+            right: -100px;
+            width: 600px;
+            height: 600px;
+            background: url('https://images.unsplash.com/photo-1543857778-c4a1a569e7bd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80') center/cover no-repeat;
+            opacity: 0.15;
+            filter: grayscale(50%);
+            z-index: -1;
+            transform: rotate(15deg);
+        }
+        .hero-content {
+            max-width: 900px;
+            z-index: 2;
+            text-align: center;
+        }
+        .hero-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: clamp(3rem, 8vw, 6rem);
+            line-height: 1.1;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: translateY(50px);
+            animation: flyIn 0.8s ease-out forwards;
+            color: var(--light-color);  /* Changed from blue to white */
+        }
+        .hero-subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            margin-bottom: 10px;
+            color: var(--text-blue);  /* Blue for heading */
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: flyIn 0.8s ease-out 0.3s forwards;
+        }
+        .hero-tagline {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            margin-bottom: 20px;
+            color: var(--light-color);  /* White for normal text */
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: flyIn 0.8s ease-out 0.6s forwards;
+        }
+        .hero-date {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: flyIn 0.8s ease-out 0.9s forwards;
+            color: var(--light-color);  /* White for date text */
+        }
+        .hero-date span {
+            color: white;  /* White for date spans */
+        }
+        /* Countdown Timer */
+        .countdown-container {
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: flyIn 0.8s ease-out 1.2s forwards;
+        }
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .countdown-item {
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 80px;
+        }
+        .countdown-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-blue);  /* Blue for countdown numbers */
+        }
+        .countdown-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            color: var(--light-color);  /* White for countdown labels */
+        }
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            z-index: 10;
+        }
+        .scroll-indicator i {
+            font-size: 2rem;
+            color: var(--primary-color);  /* Blue for scroll indicator */
+        }
+        /* Sections */
+        .section {
+            padding: 100px 0;
+            background-color: rgba(18, 18, 18, 0.85);
+            backdrop-filter: blur(5px);
+            border-radius: 30px;
+            margin: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            text-transform: uppercase;
+            color: var(--text-blue);  /* Blue for section headings */
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background-color: var(--primary-color);  /* Blue */
+        }
+        /* About Section - Enhanced */
+        .about {
+            background: rgba(18, 18, 18, 0.85);
+            backdrop-filter: blur(5px);
+            position: relative;
+        }
+        .about::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(52, 152, 219, 0.1) 0%, rgba(0, 0, 0, 0) 70%);  /* Blue */
+            z-index: 1;
+            border-radius: 30px;
+        }
+        .about-container {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: stretch;
+        }
+        .about-content {
+            padding: 40px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(52, 152, 219, 0.2);  /* Blue */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(30px);
+            opacity: 0;
+            transition: all 0.8s ease;
+        }
+        .about-content.animate {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .about-content h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--text-blue);  /* Blue for heading */
+        }
+        .about-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: var(--light-color);  /* White for normal text */
+        }
+        .about-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .about-feature {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        .about-feature i {
+            font-size: 1.5rem;
+            color: var(--primary-color);  /* Blue for icons */
+            margin-right: 15px;
+            margin-top: 5px;
+        }
+        .about-feature-content h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--text-blue);  /* Blue for heading */
+        }
+        .about-feature-content p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+            color: var(--light-color);  /* White for normal text */
+        }
+        /* Registration Form in About Section */
+        .registration-form {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 10px;
+            height: 100%;
+            overflow-y: auto;
+        }
+        .success-message {
+            display: none;
+            background-color: rgba(46, 204, 113, 0.2);  /* Green for success */
+            border: 1px solid var(--success-color);  /* Green */
+            color: var(--success-color);  /* Green */
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .success-message.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        .error-message {
+            display: none;
+            background-color: rgba(231, 76, 60, 0.2);  /* Red for error */
+            border: 1px solid var(--error-color);  /* Red */
+            color: var(--error-color);  /* Red */
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .error-message.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--light-color);  /* White for form labels */
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            color: var(--light-color);  /* White for form text */
+            font-family: 'Open Sans', sans-serif;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);  /* Blue */
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3);  /* Blue */
+        }
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        .form-control.error {
+            border-color: var(--error-color);  /* Red for error */
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-color);  /* Blue */
+            color: var(--dark-color);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .submit-btn:hover, .submit-btn:focus {
+            background-color: var(--light-color);
+            outline: none;
+        }
+        .submit-btn:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        /* Speakers Section */
+        .speakers-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 60px;
+            justify-content: center;
+        }
+        .speaker-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            max-width: 400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .speaker-card.animate {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        .speaker-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        .speaker-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            object-position: center;
+            cursor: pointer;
+            transition: transform 0.5s ease;
+            border-radius: 10px 10px 0 0;
+        }
+        .speaker-card:hover .speaker-img {
+            transform: scale(1.05);
+        }
+        .speaker-info {
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+        }
+        .speaker-name {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            color: var(--text-blue);  /* Blue for speaker name */
+        }
+        .speaker-title {
+            color: var(--primary-color);  /* Blue for speaker title */
+            margin-bottom: 15%;
+        }
+        /* Show More Button */
+        .show-more-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+        .show-more-btn {
+            background-color: var(--primary-color);  /* Blue */
+            color: var(--dark-color);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .show-more-btn:hover {
+            background-color: var(--light-color);
+            transform: translateY(-3px);
+        }
+        .hidden-speaker {
+            display: none;
+        }
+        /* Speaker Modal */
+        .speaker-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .speaker-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-content {
+            background-color: var(--dark-color);
+            border-radius: 10px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+        .speaker-modal.active .modal-content {
+            transform: scale(1);
+        }
+        .modal-header {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+        }
+        .modal-header img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+        .modal-body {
+            padding: 30px;
+        }
+        .modal-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--text-blue);  /* Blue for modal title */
+        }
+        .modal-subtitle {
+            color: var(--primary-color);  /* Blue for modal subtitle */
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        .modal-bio {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--light-color);  /* White for modal bio text */
+        }
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: var(--light-color);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        .close-modal:hover, .close-modal:focus {
+            background-color: var(--primary-color);  /* Blue */
+            color: var(--dark-color);
+            transform: rotate(90deg);
+            outline: none;
+        }
+        /* Pledge Slip */
+        .pledge-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 10px;
+        }
+        /* Footer */
+        .footer {
+            background: rgba(18, 18, 18, 0.85);
+            backdrop-filter: blur(5px);
+            padding: 70px 0 30px;
+            border-radius: 30px 30px 0 0;
+            margin: 20px 20px 0 20px;
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+        .footer-column h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-blue);  /* Blue for footer headings */
+        }
+        .footer-column p, .footer-column li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+            color: var(--light-color);  /* White for footer text */
+        }
+        .footer-column ul {
+            list-style: none;
+        }
+        .footer-column a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer-column a:hover {
+            color: var(--primary-color);  /* Blue on hover */
+        }
+        .social-links {
+            display: flex;
+            margin-top: 20px;
+        }
+        .social-links a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            margin-right: 10px;
+            color: var(--light-color);
+            transition: all 0.3s ease;
+        }
+        .social-links a:hover {
+            background-color: var(--primary-color);  /* Blue */
+            color: var(--dark-color);
+            transform: translateY(-3px);
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #777;
+            font-size: 0.9rem;
+        }
+        /* Animations */
+        @keyframes flyIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-20px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+        }
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .speakers-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 40px;
+            }
+        }
+        @media (max-width: 992px) {
+            .nav-links li {
+                margin-left: 20px;
+            }
+            .about-container {
+                grid-template-columns: 1fr;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .registration-form {
+                height: auto;
+                max-height: none;
+            }
+        }
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background-color: rgba(18, 18, 18, 0.95);
+                flex-direction: column;
+                align-items: center;
+                padding: 20px 0;
+                transform: translateY(-150%);
+                transition: transform 0.3s ease;
+                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+            }
+            .nav-links.active {
+                transform: translateY(0);
+            }
+            .nav-links li {
+                margin: 10px 0;
+            }
+            .hero-title {
+                font-size: 3rem;
+                line-height: 1.2;
+            }
+            .hero-subtitle {
+                font-size: 1.8rem;
+            }
+            .section-title {
+                font-size: 2.5rem;
+            }
+            .countdown {
+                flex-wrap: wrap;
+            }
+            .countdown-item {
+                min-width: 70px;
+                padding: 10px;
+            }
+            .countdown-value {
+                font-size: 1.5rem;
+            }
+            .about-features {
+                grid-template-columns: 1fr;
+            }
+            .speakers-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .registration-form {
+                height: auto;
+                max-height: none;
+            }
+        }
+        @media (max-width: 576px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .hero-subtitle {
+                font-size: 1.5rem;
+            }
+            .hero-date {
+                font-size: 1.2rem;
+            }
+            .section {
+                padding: 70px 0;
+                margin: 10px;
+            }
+            .registration-form, .pledge-form {
+                padding: 30px 20px;
+            }
+            .modal-body {
+                padding: 20px;
+            }
+            .modal-title {
+                font-size: 1.5rem;
+            }
+            .registration-form {
+                height: auto;
+                max-height: none;
+            }
+            .footer {
+                margin: 10px 10px 0 10px;
+            }
+            .logo img {
+                height: 40px;
+            }
+            .logo-text {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Skip to main content link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="loader"></div>
+    </div>
+    
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <img src="LOGO.png" alt="THE EXCELLENT LIFE CONFERENCE Logo">
+                <span class="logo-text"></span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#about">About</a></li>
+                <li><a href="#speakers">Speakers</a></li>
+                <li><a href="#pledge">RC Partners Pledge Slip</a></li>
+                <li><a href="http://youtube.com/@hillcitynigeria9319" target="_blank" class="watch-live">Watch Live</a></li>
+            </ul>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="warrior-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">THE EXCELLENT LIFE CONFERENCE</h1>
+            <p class="hero-tagline">THRIVE<br>GROWTH | ADVANCE | PROGRESS</p>
+            <p class="hero-date"><span>Friday, September 5th</span> - <span>Sunday, September 7th, 2025</span></p>
+            
+            <!-- Countdown Timer -->
+            <div class="countdown-container">
+                <div class="countdown" id="countdown">
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="days">00</div>
+                        <div class="countdown-label">Days</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="hours">00</div>
+                        <div class="countdown-label">Hours</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="minutes">00</div>
+                        <div class="countdown-label">Minutes</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="seconds">00</div>
+                        <div class="countdown-label">Seconds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+    
+    <!-- About Section with Registration Form -->
+    <section class="section about" id="about">
+        <div class="container">
+            <div class="about-container">
+                <div class="about-content">
+                    <h3>About The Excellent Life Conference</h3>
+                    <p>The TEL conference is more than an event - it is a divine appointment for transformation inspired by Genesis 23 and Psalm 1:3. We believe that to truly thrive is to be deeply rooted in God, to advance in obedience despite opposition, and to progress in a way that blesses others. Thrive encapsulates growth, advance, and progress (GAP) not just as goals but as outcomes of an encounter with God. Over these three days, the conference is designed to shape who we become, not just what we receive.</p>
+                    <p>Beyond personal edification, this conference is a bridge for others to experience transformation through those who attended. It is a believers' meeting, but the atmosphere is open to all who are ready for transformation.</p>
+                    
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <i class="fas fa-dove"></i>
+                            <div class="about-feature-content">
+                                <h4>Growth</h4>
+                                <p>Deepen your relationship with God and experience spiritual transformation</p>
+                            </div>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-shield-alt"></i>
+                            <div class="about-feature-content">
+                                <h4>Advance</h4>
+                                <p>Learn effective strategies for spiritual battle and victory</p>
+                            </div>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-chart-line"></i>
+                            <div class="about-feature-content">
+                                <h4>Progress</h4>
+                                <p>Discover your purpose and advance in your God-given calling</p>
+                            </div>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-users"></i>
+                            <div class="about-feature-content">
+                                <h4>Cooperate Impact and Spiritual Legacy</h4>
+                                <p>Connect with like-minded believers and build lasting relationships</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Registration Form -->
+                <div class="registration-form">
+                    <h2 class="section-title">Conference Registration</h2>
+                    <div class="success-message" id="registrationSuccess">
+                        <i class="fas fa-check-circle"></i> Thank you for registering! We will contact you shortly with more information.
+                    </div>
+                    <div class="error-message" id="registrationError"></div>
+                    <form id="registrationForm" class="registration-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fullName">Full Name</label>
+                                <input type="text" id="fullName" class="form-control" placeholder="Enter your full name" required aria-required="true">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" class="form-control" placeholder="Enter your email" required aria-required="true">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" class="form-control" placeholder="Enter your phone number">
+                            </div>
+                            <div class="form-group">
+                                <label for="church">Church (Optional)</label>
+                                <input type="text" id="church" class="form-control" placeholder="Enter your church name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="hearAbout">How did you hear about us?</label>
+                            <select id="hearAbout" class="form-control" required aria-required="true">
+                                <option value="">Select an option</option>
+                                <option value="social-media">Social Media</option>
+                                <option value="friend">Friend or Family</option>
+                                <option value="church">Church Announcement</option>
+                                <option value="website">Our Website</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="accommodation">Accommodation Needs</label>
+                            <select id="accommodation" class="form-control">
+                                <option value="">Do you need accommodation?</option>
+                                <option value="yes">Yes, I need accommodation</option>
+                                <option value="no">No, I have my own accommodation</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="specialRequests">Special Requests (Optional)</label>
+                            <textarea id="specialRequests" class="form-control" rows="3" placeholder="Enter any special requests or accessibility needs"></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Register Now</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Speakers Section -->
+    <section class="section" id="speakers">
+        <div class="container">
+            <h2 class="section-title">Featured Speakers</h2>
+            <div class="speakers-grid">
+                <div class="speaker-card">
+                    <img src="ps.jpg" alt="Pastor Samson Ishaya, Senior Pastor at Hillcity Christian Center"  class="speaker-img" onclick="openSpeakerModal('Pastor Samson Ishaya', 'Senior Pastor, Hillcity Christian Center', 'With over 8 years of ministry experience, Pastor Samson brings profound insights into living a life of excellence through faith.')">
+                    <div class="speaker-info">
+                        <h3 class="speaker-name">Pastor Samson Ishaya</h3>
+                        <p class="speaker-title">Senior Pastor, Hillcity Christian Center</p>
+                    </div>
+                </div>
+                <div class="speaker-card">
+                    <img src="peva.jpg" alt="Pastor Evangel Ishaya, Co-lead Pastor at Hillcity Christian Center" class="speaker-img" onclick="openSpeakerModal('Pastor Evangel Ishaya', 'Co. lead Pastor, Hillcity Christian Center', 'An author of books on mothers spiritual warfare and victorious Christian living.')">
+                    <div class="speaker-info">
+                        <h3 class="speaker-name">Pastor Evangel Ishaya</h3>
+                        <p class="speaker-title">Co. lead Pastor, Hillcity Christian Center</p>
+                    </div>
+                </div>
+                <div class="speaker-card">
+                    <img src="deji.jpg" alt="Pastor Deji Victor Bamidele, Evangelist & Missionary" class="speaker-img" onclick="openSpeakerModal('Pastor Deji Victor Bamidele', 'Evangelist & Missionary', 'A passionate evangelist with over 15 years of experience in global missions, bringing the message of excellence to nations.')">
+                    <div class="speaker-info">
+                        <h3 class="speaker-name">Pastor Deji Victor Bamidele</h3>
+                        <p class="speaker-title">Evangelist & Missionary</p>
+                    </div>
+                </div>
+                <div class="speaker-card hidden-speaker">
+                    <img src="f.jpg" alt="FRANCIS, Theologian & Author" class="speaker-img" onclick="openSpeakerModal('FRANCIS', 'Theologian & Author', 'A victorious Christian living.')">
+                    <div class="speaker-info">
+                        <h3 class="speaker-name">Francis Omonoju</h3>
+                        <p class="speaker-title">Theologian & Author</p>
+                    </div>
+                </div>
+            </div>
+            <div class="show-more-container">
+                <button class="show-more-btn" id="showMoreBtn">Show More</button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Speaker Modal -->
+    <div class="speaker-modal" id="speakerModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeSpeakerModal()" aria-label="Close speaker modal">&times;</button>
+            <div class="modal-header">
+                <img id="modalImage" src="" alt="Speaker photo">
+            </div>
+            <div class="modal-body">
+                <h2 class="modal-title" id="modalTitle"></h2>
+                <p class="modal-subtitle" id="modalSubtitle"></p>
+                <p class="modal-bio" id="modalBio"></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Pledge Slip Section -->
+    <section class="section" id="pledge">
+        <div class="container">
+            <h2 class="section-title">RC Partners Pledge Slip</h2>
+            <div class="success-message" id="pledgeSuccess">
+                <i class="fas fa-check-circle"></i> Thank you for your pledge! We will contact you shortly.
+            </div>
+            <div class="error-message" id="pledgeError"></div>
+            <form id="pledgeForm" class="pledge-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pledgeFullName">Full Name</label>
+                        <input type="text" id="pledgeFullName" class="form-control" placeholder="Enter your full name" required aria-required="true">
+                    </div>
+                    <div class="form-group">
+                        <label for="pledgeEmail">Email Address</label>
+                        <input type="email" id="pledgeEmail" class="form-control" placeholder="Enter your email" required aria-required="true">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pledgePhone">Phone Number</label>
+                        <input type="tel" id="pledgePhone" class="form-control" placeholder="Enter your phone number">
+                    </div>
+                    <div class="form-group">
+                        <label for="pledgeAmount">Pledge Amount</label>
+                        <input type="number" id="pledgeAmount" class="form-control" placeholder="Enter pledge amount" required aria-required="true">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="pledgeType">Pledge Type</label>
+                    <select id="pledgeType" class="form-control" required aria-required="true">
+                        <option value="">Select pledge type</option>
+                        <option value="one-time">One-time</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="quarterly">Quarterly</option>
+                        <option value="annually">Annually</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">Additional Message (Optional)</label>
+                    <textarea id="message" class="form-control" rows="4" placeholder="Enter any additional information"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Submit Pledge</button>
+            </form>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>THE EXCELLENT LIFE</h3>
+                    <p>Empowering believers to live a life of excellence through faith, spiritual warfare, and victorious Christian living.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="http://youtube.com/@hillcitynigeria9319" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#speakers">Speakers</a></li>
+                        <li><a href="#pledge">RC Partners Pledge Slip</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> DEVELOPEMENT HUB SSQ1 FED MIN OF WORKS QUTERS BARNAWA KADUNA</p>
+                    <p><i class="fas fa-phone"></i> 08037604812</p>
+                    <p><i class="fas fa-envelope"></i> thisishillcity@gmail.com</p>
+                    <P>Naira account :0090267951</P>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 THE EXCELLENT LIFE CONFERENCE. All rights reserved.</p>
+            </div>
+        </div>
+        
+    </footer>
+    
+    <script type="module">
+        // Import Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-analytics.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+        
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC__DUZU8N0rtcXWdUPGyTNaO7CprNnrf4",
+            authDomain: "tel-confrence.firebaseapp.com",
+            projectId: "tel-confrence",
+            storageBucket: "tel-confrence.firebasestorage.app",
+            messagingSenderId: "236838374789",
+            appId: "1:236838374789:web:6c01a1184460ff4704c8ec",
+            measurementId: "G-0Y3WW4KG40"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+        
+        // Preloader
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('preloader').classList.add('hidden');
+            }, 500);
+        });
+        
+        // Sticky navigation
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+        
+        mobileMenuBtn.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+        });
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 70,
+                        behavior: 'smooth'
+                    });
+                    // Close mobile menu if open
+                    navLinks.classList.remove('active');
+                }
+            });
+        });
+        
+        // Show More button functionality
+        const showMoreBtn = document.getElementById('showMoreBtn');
+        const hiddenSpeaker = document.querySelector('.hidden-speaker');
+        
+        showMoreBtn.addEventListener('click', function() {
+            if (hiddenSpeaker.style.display === 'none' || hiddenSpeaker.style.display === '') {
+                hiddenSpeaker.style.display = 'block';
+                showMoreBtn.textContent = 'Show Less';
+                // Trigger animation for the newly shown speaker
+                hiddenSpeaker.classList.add('animate');
+            } else {
+                hiddenSpeaker.style.display = 'none';
+                showMoreBtn.textContent = 'Show More';
+            }
+        });
+        
+        // Countdown Timer
+        function updateCountdown() {
+            // Set the date we're counting down to (September 5, 2025)
+            const countDownDate = new Date("September 5, 2025 09:00:00").getTime();
+            
+            // Get today's date and time
+            const now = new Date().getTime();
+            
+            // Find the distance between now and the count down date
+            const distance = countDownDate - now;
+            
+            // If the count down is finished, display a message
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.getElementById("countdown").innerHTML = "<div class='countdown-item'><div class='countdown-value'>The conference has started!</div></div>";
+                return;
+            }
+            
+            // Time calculations for days, hours, minutes and seconds
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            // Display the result
+            document.getElementById("days").innerHTML = days.toString().padStart(2, '0');
+            document.getElementById("hours").innerHTML = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, '0');
+        }
+        
+        // Update the countdown immediately and then every second
+        updateCountdown();
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        
+        // Form validation function
+        function validateForm(form) {
+            let isValid = true;
+            const requiredFields = form.querySelectorAll('[required]');
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('error');
+                    isValid = false;
+                    
+                    // Add error message if it doesn't exist
+                    if (!field.nextElementSibling || !field.nextElementSibling.classList.contains('error-message')) {
+                        const errorMsg = document.createElement('span');
+                        errorMsg.className = 'error-message';
+                        errorMsg.textContent = 'This field is required';
+                        field.parentNode.insertBefore(errorMsg, field.nextSibling);
+                    }
+                } else {
+                    field.classList.remove('error');
+                    // Remove error message if it exists
+                    if (field.nextElementSibling && field.nextElementSibling.classList.contains('error-message')) {
+                        field.nextElementSibling.remove();
+                    }
+                }
+            });
+            
+            return isValid;
+        }
+        
+        // Input sanitization function
+        function sanitizeInput(input) {
+            const div = document.createElement('div');
+            div.textContent = input;
+            return div.innerHTML;
+        }
+        
+        // Show loading indicator
+        function showLoading(form) {
+            const submitBtn = form.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            
+            return () => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            };
+        }
+        
+        // Show success message
+        function showSuccessMessage(form, message) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success-message show';
+            successDiv.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            
+            form.parentNode.insertBefore(successDiv, form);
+            form.reset();
+            
+            setTimeout(() => {
+                successDiv.remove();
+            }, 5000);
+        }
+        
+        // Show error message
+        function showErrorMessage(form, message) {
+            const errorDiv = document.getElementById(form.id === 'registrationForm' ? 'registrationError' : 'pledgeError');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+            
+            setTimeout(() => {
+                errorDiv.classList.remove('show');
+            }, 5000);
+        }
+        
+        // Registration form submission
+        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!validateForm(this)) {
+                return;
+            }
+            
+            const hideLoading = showLoading(this);
+            
+            // Get and sanitize form values
+            const fullName = sanitizeInput(document.getElementById('fullName').value);
+            const email = sanitizeInput(document.getElementById('email').value);
+            const phone = sanitizeInput(document.getElementById('phone').value);
+            const church = sanitizeInput(document.getElementById('church').value);
+            const hearAbout = sanitizeInput(document.getElementById('hearAbout').value);
+            const accommodation = sanitizeInput(document.getElementById('accommodation').value);
+            const specialRequests = sanitizeInput(document.getElementById('specialRequests').value);
+            
+            try {
+                // Add document to Firestore
+                const docRef = await addDoc(collection(db, "registrations"), {
+                    fullName,
+                    email,
+                    phone,
+                    church,
+                    hearAbout,
+                    accommodation,
+                    specialRequests,
+                    timestamp: new Date()
+                });
+                
+                console.log("Document written with ID: ", docRef.id);
+                showSuccessMessage(this, 'Thank you for registering! We will contact you shortly with more information.');
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                showErrorMessage(this, 'There was an error submitting your registration. Please try again.');
+            } finally {
+                hideLoading();
+            }
+        });
+        
+        // Pledge form submission
+        document.getElementById('pledgeForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!validateForm(this)) {
+                return;
+            }
+            
+            const hideLoading = showLoading(this);
+            
+            // Get and sanitize form values
+            const fullName = sanitizeInput(document.getElementById('pledgeFullName').value);
+            const email = sanitizeInput(document.getElementById('pledgeEmail').value);
+            const phone = sanitizeInput(document.getElementById('pledgePhone').value);
+            const pledgeAmount = sanitizeInput(document.getElementById('pledgeAmount').value);
+            const pledgeType = sanitizeInput(document.getElementById('pledgeType').value);
+            const message = sanitizeInput(document.getElementById('message').value);
+            
+            try {
+                // Add document to Firestore
+                const docRef = await addDoc(collection(db, "pledges"), {
+                    fullName,
+                    email,
+                    phone,
+                    pledgeAmount,
+                    pledgeType,
+                    message,
+                    timestamp: new Date()
+                });
+                
+                console.log("Document written with ID: ", docRef.id);
+                showSuccessMessage(this, 'Thank you for your pledge! We will contact you shortly.');
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                showErrorMessage(this, 'There was an error submitting your pledge. Please try again.');
+            } finally {
+                hideLoading();
+            }
+        });
+        
+        // Speaker modal functions
+        function openSpeakerModal(name, title, bio) {
+            document.getElementById('modalTitle').textContent = name;
+            document.getElementById('modalSubtitle').textContent = title;
+            document.getElementById('modalBio').textContent = bio;
+            
+            // Set the image based on the speaker name
+            const modalImage = document.getElementById('modalImage');
+            if (name === 'Pastor Samson Ishaya') {
+                modalImage.src = 'ps.jpg';
+            } else if (name === 'Pastor Evangel Ishaya') {
+                modalImage.src = 'peva.jpg';
+            } else if (name === 'Pastor Deji Victor Bamidele') {
+                modalImage.src = 'deji.jpg';
+            } else if (name === 'FRANCIS') {
+                modalImage.src = 'f.';
+            }
+            
+            document.getElementById('speakerModal').classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+        
+        function closeSpeakerModal() {
+            document.getElementById('speakerModal').classList.remove('active');
+            document.body.style.overflow = ''; // Re-enable scrolling
+        }
+        
+        // Close modal when clicking outside the modal content
+        document.getElementById('speakerModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSpeakerModal();
+            }
+        });
+        
+        // Make functions globally accessible
+        window.openSpeakerModal = openSpeakerModal;
+        window.closeSpeakerModal = closeSpeakerModal;
+        
+        // Animate elements on scroll
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                }
+            });
+        }, observerOptions);
+        
+        // Observe elements for animation
+        document.querySelectorAll('.about-content, .registration-form, .speaker-card').forEach(element => {
+            observer.observe(element);
+        });
+    </script>
+</body>
+</html>
