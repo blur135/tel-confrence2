@@ -147,6 +147,7 @@
         }
         .nav-links li {
             margin-left: 30px;
+            position: relative;
         }
         .nav-links a {
             color: var(--light-color);  /* White for nav links */
@@ -217,6 +218,7 @@
         /* Hero Section */
         .hero {
             height: 100vh;
+            min-height: 700px; /* Ensure minimum height for smaller screens */
             background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), 
                         url('backround.jpg') center/cover no-repeat;
             background-blend-mode: overlay;
@@ -229,7 +231,7 @@
             position: relative;
             overflow: hidden;
             margin-top: -80px;
-            padding-top: 80px;
+            padding-top: 100px; /* Increased to avoid navbar overlap */
             border-radius: 0 0 50% 50% / 20px;
         }
         .hero::before {
@@ -260,11 +262,13 @@
             max-width: 900px;
             z-index: 2;
             text-align: center;
+            padding-top: 20px; /* Add some space at the top */
         }
+        /* Updated hero styles - THRIVE is now larger */
         .hero-title {
             font-family: 'Montserrat', sans-serif;
             font-weight: 900;
-            font-size: clamp(3rem, 8vw, 6rem);
+            font-size: clamp(3.5rem, 8vw, 6rem); /* Reduced max size to prevent overlap */
             line-height: 1.1;
             margin-bottom: 15px;
             text-transform: uppercase;
@@ -273,7 +277,7 @@
             opacity: 0;
             transform: translateY(50px);
             animation: flyIn 0.8s ease-out forwards;
-            color: var(--light-color);  /* Changed from blue to white */
+            color: var(--light-color);  /* White for THRIVE text */
         }
         .hero-subtitle {
             font-family: 'Montserrat', sans-serif;
@@ -290,9 +294,9 @@
         .hero-tagline {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-size: clamp(1.8rem, 4vw, 2.2rem); /* Slightly larger than before but smaller than hero-title */
             margin-bottom: 20px;
-            color: var(--light-color);  /* White for normal text */
+            color: var(--light-color);  /* Changed from blue to white for THE EXCELLENT LIFE CONFERENCE */
             text-transform: uppercase;
             letter-spacing: 2px;
             opacity: 0;
@@ -317,6 +321,7 @@
             opacity: 0;
             transform: translateY(50px);
             animation: flyIn 0.8s ease-out 1.2s forwards;
+            margin-top: 10px; /* Add some space above the timer */
         }
         .countdown {
             display: flex;
@@ -537,6 +542,54 @@
         .form-control.error {
             border-color: var(--error-color);  /* Red for error */
         }
+        /* Updated select dropdown styles */
+        .form-control select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            padding-right: 40px;
+        }
+        
+        /* Custom dropdown styles */
+        .form-control option {
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            padding: 10px;
+        }
+        
+        /* Make dropdowns more visible */
+        .form-control:hover {
+            border-color: var(--primary-color);
+        }
+        
+        /* Style for the dropdown when it's open */
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3);
+        }
+        
+        /* Custom dropdown arrow */
+        .select-wrapper {
+            position: relative;
+        }
+        
+        .select-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 8px solid var(--light-color);
+            pointer-events: none;
+        }
+        
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -876,6 +929,7 @@
                 transform: translateY(-150%);
                 transition: transform 0.3s ease;
                 box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+                z-index: 999; /* Ensure dropdown is above other content */
             }
             .nav-links.active {
                 transform: translateY(0);
@@ -987,8 +1041,9 @@
     <section class="hero">
         <div class="warrior-overlay"></div>
         <div class="hero-content">
-            <h1 class="hero-tagline">THRIVE<br>GROW | ADVANCE | PROGRESS</h1>
-            <h5 class="hero-title">THE EXCELLENT LIFE CONFERENCE</h5>
+            <!-- Updated hero section - THRIVE is now the large text -->
+            <h1 class="hero-title">THRIVE<br>GROW | ADVANCE | PROGRESS</h1>
+            <h5 class="hero-tagline">THE EXCELLENT LIFE CONFERENCE</h5>
             <p class="hero-date"><span>Friday, September 5th</span> - <span>Sunday, September 7th, 2025</span></p>
             
             <!-- Countdown Timer -->
@@ -1089,22 +1144,26 @@
                         </div>
                         <div class="form-group">
                             <label for="hearAbout">How did you hear about us?</label>
-                            <select id="hearAbout" class="form-control" required aria-required="true">
-                                <option value="">Select an option</option>
-                                <option value="social-media">Social Media</option>
-                                <option value="friend">Friend or Family</option>
-                                <option value="church">Church Announcement</option>
-                                <option value="website">Our Website</option>
-                                <option value="other">Other</option>
-                            </select>
+                            <div class="select-wrapper">
+                                <select id="hearAbout" class="form-control" required aria-required="true">
+                                    <option value="">Select an option</option>
+                                    <option value="social-media">Social Media</option>
+                                    <option value="friend">Friend or Family</option>
+                                    <option value="church">Church Announcement</option>
+                                    <option value="website">Our Website</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="accommodation">Accommodation Needs</label>
-                            <select id="accommodation" class="form-control">
-                                <option value="">Do you need accommodation?</option>
-                                <option value="yes">Yes, I need accommodation</option>
-                                <option value="no">No, I have my own accommodation</option>
-                            </select>
+                            <div class="select-wrapper">
+                                <select id="accommodation" class="form-control">
+                                    <option value="">Do you need accommodation?</option>
+                                    <option value="yes">Yes, I need accommodation</option>
+                                    <option value="no">No, I have my own accommodation</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="specialRequests">Special Requests (Optional)</label>
@@ -1203,13 +1262,15 @@
                 </div>
                 <div class="form-group">
                     <label for="pledgeType">Pledge Type</label>
-                    <select id="pledgeType" class="form-control" required aria-required="true">
-                        <option value="">Select pledge type</option>
-                        <option value="one-time">One-time</option>
-                        <option value="monthly">Monthly</option>
-                        <option value="quarterly">Quarterly</option>
-                        <option value="annually">Annually</option>
-                    </select>
+                    <div class="select-wrapper">
+                        <select id="pledgeType" class="form-control" required aria-required="true">
+                            <option value="">Select pledge type</option>
+                            <option value="one-time">One-time</option>
+                            <option value="monthly">Monthly</option>
+                            <option value="quarterly">Quarterly</option>
+                            <option value="annually">Annually</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="message">Additional Message (Optional)</label>
@@ -1302,6 +1363,16 @@
         
         mobileMenuBtn.addEventListener('click', function() {
             navLinks.classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const isClickInsideNav = navLinks.contains(event.target);
+            const isClickOnMenuBtn = mobileMenuBtn.contains(event.target);
+            
+            if (!isClickInsideNav && !isClickOnMenuBtn && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+            }
         });
         
         // Smooth scrolling for navigation links
@@ -1586,5 +1657,4 @@
         });
     </script>
 </body>
-
 </html>
