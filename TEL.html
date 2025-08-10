@@ -1144,15 +1144,18 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="hearAbout">Break Out Section</label>
+                                <label for="location">location</label>
+                                <input type="text" id="church" class="form-control" placeholder="Enter your location">
+                            </div>
+                        <div class="form-group">
+                            <label for="breakoutSession">Break Out Session</label>
                             <div class="select-wrapper">
-                                <select id="hearAbout" class="form-control" required aria-required="true">
-                                    <option value="">Select an option On a date</option>
-                                    <option value="social-media">Ministry</option>
-                                    <option value="friend">Leadership</option>
-                                    <option value="church">Entreprise</option>
-                                    <option value="website">Career and Profesional practice</option>
-                                    <option value="other">Other</option>
+                                <select id="breakoutSession" class="form-control" required aria-required="true">
+                                    <option value="">Select an option</option>
+                                    <option value="ministry">Ministry</option>
+                                    <option value="leadership">Leadership</option>
+                                    <option value="entrepreneurship">Entrepreneurship</option>
+                                    <option value="career">Career and Professional practice</option>
                                 </select>
                             </div>
                         </div>
@@ -1545,6 +1548,8 @@
             const email = sanitizeInput(document.getElementById('email').value);
             const phone = sanitizeInput(document.getElementById('phone').value);
             const church = sanitizeInput(document.getElementById('church').value);
+            const breakoutSession = sanitizeInput(document.getElementById('breakoutSession').value);
+            const location = sanitizeInput(document.getElementById('location').value);
             const hearAbout = sanitizeInput(document.getElementById('hearAbout').value);
             const accommodation = sanitizeInput(document.getElementById('accommodation').value);
             const specialRequests = sanitizeInput(document.getElementById('specialRequests').value);
@@ -1556,6 +1561,8 @@
                     email,
                     phone,
                     church,
+                    breakoutSession,
+                    location,
                     hearAbout,
                     accommodation,
                     specialRequests,
@@ -1672,4 +1679,3 @@
     </script>
 </body>
 </html>
-
